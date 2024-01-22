@@ -1,0 +1,150 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "icon": "mi:computer",
+      "href": "/categories/Mac",
+      "name": "Mac"
+    },
+    {
+      "id": 1,
+      "icon": "pepicons-print:smartphone-notch",
+      "href": "/categories/iPhone",
+      "name": "iPhone"
+    },
+    {
+      "id": 2,
+      "icon": "tdesign:watch",
+      "href": "/categories/iPad",
+      "name": "iPad"
+    },
+    {
+      "id": 3,
+      "icon": "raphael:ipad",
+      "href": "/categories/iWatch",
+      "name": "iWatch"
+    },
+    {
+      "id": 4,
+      "icon": "solar:airbuds-case-open-broken",
+      "href": "/categories/AirPods",
+      "name": "AirPods"
+    },
+    {
+      "id": 5,
+      "icon": "ph:suitcase-simple-duotone",
+      "href": "/categories/Accessories",
+      "name": "Accessories"
+    }
+  ],
+
+  "product": [
+    {
+      "id": "1",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "300",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "2",
+      "name": "Apple Watch Series 3",
+      "description": "AppleWatch",
+      "price": "400",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "3",
+      "name": "Apple Watch Series 4",
+      "description": "AppleWatch",
+      "price": "500",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "4",
+      "name": "Apple Watch Series 5",
+      "description": "AppleWatch",
+      "price": "600",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "5",
+      "name": "MacBook",
+      "description": "AppleWatch",
+      "price": "700",
+      "images": ["/images/macBook.svg"]
+    },
+    {
+      "id": "6",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "7",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "8",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "9",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "10",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "11",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    },
+    {
+      "id": "12",
+      "name": "Apple Watch Series 7",
+      "description": "AppleWatch",
+      "price": "900",
+      "images": ["/images/appleWatch.svg"]
+    }
+  ],
+
+  "colors": [
+    {
+      "id": 0,
+      "img": "/images/iphoneBlue.svg",
+      "col": "#5f778a"
+    },
+    {
+      "id": 1,
+      "img": "/images/iphonePink.svg",
+      "col": "#FFB6C1"
+    },
+    {
+      "id": 2,
+      "img": "/images/iphoneDark.svg",
+      "col": "#54544e"
+    },
+    {
+      "id": 3,
+      "img": "/images/iphoneLight.svg",
+      "col": "#878681"
+    }
+  ]
+}
