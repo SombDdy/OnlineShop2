@@ -17,8 +17,8 @@ interface ProductCardProps {
 export default function ProductCard({ item }: ProductCardProps) {
     return (
         <div className={`w-fit ${item.name === 'MacBook' ? 'col-span-2' : 'col-span-1'}`}>
-            <div className="flex rounded-3xl justify-start flex-col w-fit">
-                <div className=" rounded-3xl bg-text px-10 py-6 sm:px-16 sm:py-12">
+            <div className="flex rounded-3xl flex-col w-fit">
+                <div className=" rounded-3xl bg-text shadow-lg px-10 py-6 sm:px-16 sm:py-12">
                 <Link href={`/product/${item.name}`} className="">
                     <Image width={0} height={0} alt='product' src={item.images[0]} className="w-full" />
                 </Link>

@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import React from "react";
 import StarIcon from '@mui/icons-material/Star';
 
-const labels: { [index: string]: string } = {
+const labels: { [index: number]: string } = {
     0.5: '0.5 / 5',
     1: '1 / 5',
     1.5: '1.5 / 5',
@@ -30,8 +30,8 @@ export default function Product() {
     const { colors, product } = data;
 
     const [pickedColor, setPickedColor] = useState<number>(0);
-    const [value, setValue] = useState<string>('3.5')
-    const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: string | null) => {
+    const [value, setValue] = useState<number>(3.5)
+    const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
         if (newValue !== null) {
             setValue(newValue);
         }
