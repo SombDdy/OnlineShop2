@@ -48,6 +48,10 @@ export default function Basket() {
         return products.reduce((total, product) => total + product.pricePerItem * product.quantity, 0);
     }
 
+    const backButton = () => {
+        router.back();
+    }
+
     const addProduct = (index: number) => {
         const updatedProducts = [...products];
         updatedProducts[index].quantity += 1;
@@ -79,19 +83,23 @@ export default function Basket() {
 
     return (
         <Layout>
-            <div className="pt-12 pb-12 w-full px-2 sm:px-4 lg:px-14">
+            <div className="pt-5 pb-12 w-full px-2 sm:px-4 lg:px-14">
                 <div className="">
                     <div className="flex flex-col">
-                        <p className="text-black text-xl lg:text-2xl xl:text-7xl">Check your Bag items</p>
+                        <button onClick = {backButton} className="pb-10 flex md2:hidden flex-row items-center gap-x-2 sm:gap-x-3">
+                            <Icon icon="cil:arrow-top" rotate={3} className="text-black text-xl xs2:text-2xl sm:text-4xl font-medium" />
+                            <p className="text-lg xs2:text-xl sm:text-3xl font-medium">Back</p>
+                        </button>
+                        <p className="text-black text-2xl xs2:text-3xl sm:text-5xl md2:text-4xl lg:text-5xl xl:text-7xl">Check your Bag items</p>
                         {products.map((product, index) => (
                             <div className="mt-10 flex justify-center">
                                 <div key={index} className="flex w-fit px-8 sm:px-10 md2:pl-10 items-center bg-text rounded-2xl h-fit">
                                     <div className="flex flex-col items-start">
                                         <div className="flex flex-col md2:flex-row py-4 md2:py-0">
-                                            <div className="flex justify-center w-fit">
+                                            <Link href={'/product/Apple'} className="flex justify-center md2:w-fit">
                                                 <Image width={0} height={0} alt="product" src="/images/iphoneLight.svg" className="w-3/5 md2:w-96 lg:w-60 xl:w-72" />
-                                            </div>
-                                            <div className = "">
+                                            </Link>
+                                            <div className="">
                                                 <p className="text-black text-base lg:text-lg xl:text-4xl font-medium mb-4 mt-4">{product.name}</p>
                                                 <p className="text-neutral-400 text-sm lg:text-base xl:text-1xl font-medium">{product.category}</p>
                                                 <p className="mt-4 mb-8 text-sm lg:text-base xl:text-2xl font-medium">{product.description}</p>
@@ -108,7 +116,7 @@ export default function Basket() {
                                                         value={product.rating}
                                                         precision={0.5}
                                                         readOnly
-                                                        size = "large"
+                                                        size="large"
                                                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                                                         icon={<StarIcon style={{ color: 'green' }} fontSize="inherit" />}
                                                         onChange={(event: any, newValue: number | null) => handleRatingChange(index, newValue)}

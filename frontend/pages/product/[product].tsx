@@ -33,16 +33,19 @@ export default function Product() {
     const [value, setValue] = useState<string>('3.5')
     const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: string | null) => {
         if (newValue !== null) {
-          setValue(newValue);
+            setValue(newValue);
         }
-      }
+    }
+    const backButton = () => {
+        router.back();
+    }
     return (
         <Layout>
             <div className="xl:pt-10 w-full">
-                <div className = "px-4 sm:px-8 flex md2:hidden flex-row items-center gap-x-2 sm:gap-x-3">
-                <Icon icon="cil:arrow-top" rotate={3} className="text-black text-xl xs2:text-2xl sm:text-4xl font-medium" />
-                    <p className = "text-lg xs2:text-xl sm:text-3xl font-medium">Back</p>
-                </div>
+                <button onClick={backButton} className="px-4 sm:px-8 flex md2:hidden flex-row items-center gap-x-2 sm:gap-x-3">
+                    <Icon icon="cil:arrow-top" rotate={3} className="text-black text-xl xs2:text-2xl sm:text-4xl font-medium" />
+                    <p className="text-lg xs2:text-xl sm:text-3xl font-medium">Back</p>
+                </button>
                 <div className=" pt-8 md2:pt-0 grid grid-cols-10 w-full pr-2 sm:pr-4 lg:pr-14 px-2 sm:px-4 lg:px-14">
                     <div className="col-span-10 md2:col-span-4 row-start-1 row-end-2 mr-4">
                         <div className="h-fit">
@@ -70,24 +73,24 @@ export default function Product() {
                         <div className="flex flex-col">
                             <p className="text-black text-xl xl:text-3xl font-bold font-['Poppins']">Apple Watch</p>
                             <p className="text-black text-opacity-50 text-base xl:text-xl font-medium font-['Poppins'] pt-2 lg:pt-3">Series 5 SE</p>
-                            <div className = "pt-2 lg:pt-4">
-                            <Box
-                                sx={{
-                                    width: 200,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Rating
-                                    name="text-feedback"
-                                    value={value}
-                                    precision={0.5}
-                                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                                    icon={<StarIcon style={{ color: 'green' }} fontSize="inherit" />}
-                                    onChange={handleRatingChange}
-                                />
-                                <Box sx={{ ml: 2 }}>{labels[value]}</Box>
-                            </Box>
+                            <div className="pt-2 lg:pt-4">
+                                <Box
+                                    sx={{
+                                        width: 200,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Rating
+                                        name="text-feedback"
+                                        value={value}
+                                        precision={0.5}
+                                        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                                        icon={<StarIcon style={{ color: 'green' }} fontSize="inherit" />}
+                                        onChange={handleRatingChange}
+                                    />
+                                    <Box sx={{ ml: 2 }}>{labels[value]}</Box>
+                                </Box>
                             </div>
                             <p className="text-black text-base lg:text-xl font-bold font-['Poppins'] pt-3 lg:pt-5">$ 529.99</p>
                             <p className="text-black text-opacity-50 text-base lg:text-xl font-medium font-['Poppins'] pt-3 lg:pt-5">Dial Size</p>

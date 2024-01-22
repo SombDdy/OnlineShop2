@@ -28,9 +28,9 @@ export default function Bag() {
                     <div className="flex justify-center pt-10">
                         <button onClick={handleButtonClick} className="bg-black text-text py-2 w-4/5 rounded-3xl">Make an order</button>
                     </div>
-                </div><div className={`col-span-3 bg-text rounded-3xl w-full xs2:w-4/5 sm:w-3/5 h-full p-10 ${isFormVisible ? 'hidden' : 'flex flex-col'}`}>
+                </div><div className={`col-span-3 bg-text rounded-3xl w-full xs2:w-4/5 sm:w-3/5 md2:w-full h-full p-10 ${isFormVisible ? 'hidden' : 'flex flex-col'}`}>
                         <div className="flex flex-row justify-between">
-                            <p className="text-black sm:text-3xl font-medium">Card detail</p>
+                            <p className="text-black sm:text-3xl md2:text-2xl font-medium">Card detail</p>
                             <button onClick={handleButtonClick}>
                                 <Icon icon="cil:arrow-top" rotate={3} className="text-black sm:text-xl font-medium" />
                             </button>

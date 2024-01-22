@@ -17,7 +17,7 @@ export default function Search() {
             {isCategory ? (
                 <><div className="col-span-5 flex flex-col md2:hidden">
                     <p className="mb-3 text-zinc-600 font-normal pl-4">Search items</p>
-                    <input type="text" placeholder="Apple Watch, Samsung S21, Macbook Pro, ..." className="bg-text pl-4 text-xs rounded-lg w-full py-2 placeholder-black text-opacity-50 font-medium" />
+                    <input type="text" placeholder="Apple Watch, Samsung S21, Macbook Pro, ..." className="truncate bg-text pl-4 text-xs rounded-lg w-full py-2 placeholder-black text-opacity-50 font-medium" />
                 </div><div className="text-text-light relative hidden md2:flex col-span-1">
                     <Link href='/'>
                         <img src="/images/logoV1.svg" />
