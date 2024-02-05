@@ -20,7 +20,6 @@ export default function Layout({ children }: LayoutProps) {
                 <Sidebar />
                 <div className={`w-full md2:h-screen md2:overflow-y-scroll ${isBasket ? 'md2:mr-[28vw]' : !!isCategory ? 'mr-0 md2:mr-[19vw]' : 'mr-0'} lg:w-full bg-bg-body`}>
                     <div className = "my-10">
-                    <Search />
                     {children}
                     </div>
                 </div>

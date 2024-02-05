@@ -118,7 +118,7 @@ export default function Basket() {
                                                         readOnly
                                                         size="large"
                                                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                                                        icon={<StarIcon style={{ color: 'green' }} fontSize="inherit" />}
+                                                        icon={<StarIcon style={{ color: 'orange' }} fontSize="inherit" />}
                                                         onChange={(event: any, newValue: number | null) => handleRatingChange(index, newValue)}
                                                     />
                                                     <Box sx={{ ml: 2 }}>{labels[product.rating]}</Box>

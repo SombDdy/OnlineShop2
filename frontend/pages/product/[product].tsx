@@ -1,14 +1,14 @@
 import { Layout } from "@/components";
 import { Icon } from '@iconify/react';
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { ProductCard } from '@ui';
-import data from '../../data/DB.json';
+import { useEffect, useState } from "react";
+import data from '../../data/data.json';
 import Image from "next/image";
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import React from "react";
 import StarIcon from '@mui/icons-material/Star';
+import { toast } from "react-toastify";
 
 const labels: { [index: number]: string } = {
     0.5: '0.5 / 5',
@@ -23,22 +23,143 @@ const labels: { [index: number]: string } = {
     5: '5 / 5',
 };
 
+interface Modification {
+    name?: string;
+    price: string;
+}
+
+interface Characteristic {
+    name: string;
+    value: string;
+    type: string;
+}
+
+interface ImageInfo {
+    name: string,
+    color: string,
+    main?: boolean
+}
+
+interface ProductInfo {
+    phones: any;
+    name: string;
+    description: string;
+    modifications: Modification[];
+    category: string;
+    characteristics: Characteristic[];
+    images: ImageInfo[];
+}
+
 export default function Product() {
     const router = useRouter()
     const path = router.asPath
     const isCategory = router.asPath.split('/')[2];
-    const { colors, product } = data;
 
-    const [pickedColor, setPickedColor] = useState<number>(0);
+    const [pickedColor, setPickedColor] = useState<string | null>(null);
+    const [uniqueColors, setUniqueColors] = useState<Set<string>>(new Set());
+    const [selectedModification, setSelectedModification] = useState<Modification | null>(null);
     const [value, setValue] = useState<number>(3.5)
-    const handleRatingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
+    const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+
+
+    const getColorFromImagePath = (imagePath: string) => {
+        const colorMatch = imagePath.match(/\/\w+\/\w+\/(\w+)\/\w+/);
+        return colorMatch ? colorMatch[1] : null;
+    };
+
+    const ratingChange = (event: React.ChangeEvent<{}>, newValue: number | null) => {
         if (newValue !== null) {
             setValue(newValue);
         }
     }
     const backButton = () => {
         router.back();
-    }
+    };
+
+    const productName = router.query.product;
+    const item: ProductInfo = data.find((product) => product.name.replace(/\s/g, '') === productName);
+
+    const otherImages = item?.images.filter((image) => image.name) || [];
+
+    const [filteredImages, setFilteredImages] = useState<ImageInfo[]>(otherImages);
+
+    const colors = Array.from(uniqueColors).filter((color) => color !== null);
+    const price = selectedModification?.price || '';
+    const modifications = item?.modifications || [];
+
+    useEffect(() => {
+        if (colors.length > 0 && pickedColor === null) {
+            const initialColor = colors[0];
+            setPickedColor(initialColor);
+            const initialFilteredImages = initialColor
+                ? item?.images.filter((image) => getColorFromImagePath(image.name) === initialColor) || []
+                : otherImages;
+
+            setFilteredImages(initialFilteredImages);
+        }
+        if (item?.modifications && item.modifications.length > 0 && selectedModification === null) {
+            setSelectedModification(item.modifications[0]);
+        }
+        if (item && uniqueColors.size === 0) {
+            const colors = new Set(item.images.map((image) => getColorFromImagePath(image.name)));
+            setUniqueColors(colors);
+        }
+    }, [colors, item, otherImages, pickedColor, selectedModification, uniqueColors]);
+
+    const сolorButtonClick = (color: string) => {
+        setPickedColor(color);
+        const newFilteredImages = color
+            ? item?.images.filter((image) => getColorFromImagePath(image.name) === color) || []
+            : otherImages;
+
+        setFilteredImages(newFilteredImages);
+        setActiveImageIndex(0);
+    };
+
+    const onModificationClick = (modification) => {
+        setSelectedModification(modification);
+    };
+
+    const prevImage = () => {
+        if (filteredImages.length > 1) {
+            setActiveImageIndex((prevIndex) => {
+                const newIndex = (prevIndex - 1 + filteredImages.length) % filteredImages.length;
+                return newIndex;
+            });
+        }
+    };
+
+    const nextImage = () => {
+        if (filteredImages.length > 1) {
+            setActiveImageIndex((prevIndex) => {
+                const newIndex = (prevIndex + 1) % filteredImages.length;
+                return newIndex;
+            });
+        }
+    };
+    const getUniqueCharacteristicTypes = (characteristics: any[]) => {
+        const uniqueTypes = new Set();
+
+        const uniqueCharacteristics = characteristics.filter((characteristic) => {
+            const { type } = characteristic;
+
+            if (!uniqueTypes.has(type)) {
+                uniqueTypes.add(type);
+                return true;
+            }
+
+            return false;
+        });
+
+        return uniqueCharacteristics;
+    };
+
+    const characteristics = item?.characteristics || [];
+    const uniqueCharacteristicTypes = getUniqueCharacteristicTypes(characteristics);
+    const middleIndex = Math.ceil((uniqueCharacteristicTypes.length + 1) / 2);
+    const firstUniqueTypes = uniqueCharacteristicTypes.slice(0, middleIndex);
+    const remainingUniqueTypes = uniqueCharacteristicTypes.slice(middleIndex);
+    console.log(colors);
     return (
         <Layout>
             <div className="xl:pt-10 w-full">
@@ -50,20 +171,20 @@ export default function Product() {
                     <div className="col-span-10 md2:col-span-4 row-start-1 row-end-2 mr-4">
                         <div className="h-fit">
                             <div className="grid grid-cols-6 rounded-3xl">
-                                <div className="col-span-1 flex lg:justify-start flex-col gap-y-3 sm:gap-y-6 lg:gap-y-8 xl:gap-y-10 h-fit md2:h-96">
-                                    <div className="flex justify-center rounded-lg sm:rounded-2xl bg-text w-[60%] md2:w-full px-1 py-1 sm:px-3 sm:py-3">
-                                        <Image width={0} height={0} alt='product' src='/images/appleWatchDark.svg' className="w-[90%] md2:w-full" />
-                                    </div>
-                                    <div className="flex justify-center rounded-lg sm:rounded-2xl bg-text w-[60%] md2:w-full px-1 py-1 sm:px-3 sm:py-3">
-                                        <Image width={0} height={0} alt='product' src='/images/appleWatchLightBlue.svg' className="w-[90%] md2:w-full" />
-                                    </div>
-                                    <div className="flex justify-center rounded-lg sm:rounded-2xl bg-text w-[60%] md2:w-full px-1 py-1 sm:px-3 sm:py-3">
-                                        <Image width={0} height={0} alt='product' src='/images/appleWatchPink.svg' className="w-[90%] md2:w-full" />
+                                <div className="flex items-start justify-center lg:items-center col-span-6 h-fit">
+                                    <div className="flex rounded-3xl justify-center items-center bg-text 2xl:mx-10 shadow-lg px-5 py-6 sm:px-8 sm:py-10 md2:py-6 h-56 sm:h-80 md2:h-48 lg:h-80 xl:h-96 md2:w-full">
+                                        <img src={`/images${filteredImages[activeImageIndex]?.name}`} className="w-full h-full object-contain" />
                                     </div>
                                 </div>
-                                <div className="flex items-start lg:items-center col-span-5 h-fit">
-                                    <div className="flex rounded-3xl justify-center items-center bg-text w-[50%] md2:w-full mx-4">
-                                        <Image width={0} height={0} alt='product' src='/images/appleWatchGreen.svg' className="w-[90%] md2:w-full" />
+                                <div className="flex col-span-6 md2:col-start-1 md2:col-end-7 mt-4 w-full">
+                                    <div className="flex justify-center mb-4 w-full">
+                                        <button onClick={prevImage} className="px-4 py-2 bg-primary text-white rounded-full">
+                                            <Icon icon="cil:arrow-top" rotate={3} className="text-black sm:text-xl font-medium" />
+                                        </button>
+
+                                        <button onClick={nextImage} className="px-4 py-2 bg-primary text-white rounded-full">
+                                            <Icon icon="cil:arrow-top" rotate={1} className="text-black sm:text-xl font-medium" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -71,8 +192,8 @@ export default function Product() {
                     </div>
                     <div className="col-span-10 md2:col-span-6 row-start-2 row-end-3 md2:row-start-1 pt-4 md2:pt-0">
                         <div className="flex flex-col">
-                            <p className="text-black text-xl xl:text-3xl font-bold font-['Poppins']">Apple Watch</p>
-                            <p className="text-black text-opacity-50 text-base xl:text-xl font-medium font-['Poppins'] pt-2 lg:pt-3">Series 5 SE</p>
+                            <p className="text-black text-xl xl:text-3xl font-bold font-['Poppins']">{item?.name}</p>
+                            <p className="text-black text-opacity-50 text-base xl:text-xl font-medium font-['Poppins'] pt-2 lg:pt-3">{item?.category}</p>
                             <div className="pt-2 lg:pt-4">
                                 <Box
                                     sx={{
@@ -86,28 +207,49 @@ export default function Product() {
                                         value={value}
                                         precision={0.5}
                                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                                        icon={<StarIcon style={{ color: 'green' }} fontSize="inherit" />}
-                                        onChange={handleRatingChange}
+                                        icon={<StarIcon style={{ color: 'orange' }} fontSize="inherit" />}
+                                        onChange={ratingChange}
                                     />
                                     <Box sx={{ ml: 2 }}>{labels[value]}</Box>
                                 </Box>
                             </div>
-                            <p className="text-black text-base lg:text-xl font-bold font-['Poppins'] pt-3 lg:pt-5">$ 529.99</p>
-                            <p className="text-black text-opacity-50 text-base lg:text-xl font-medium font-['Poppins'] pt-3 lg:pt-5">Dial Size</p>
-                            <div className="flex flex-row gap-x-4 pt-3 lg:pt-4">
-                                <button className="px-1.5 py-1 sm:px-3 sm:py-1 lg:px-4 lg:py-2 bg-slate-400 rounded-xl sm:rounded-2xl">4.0</button>
-                                <button className="px-1.5 py-1 sm:px-3 sm:py-1 lg:px-4 lg:py-2 border-black rounded-xl sm:rounded-2xl border">4.5</button>
+                            <p className="text-black text-base lg:text-xl font-bold font-['Poppins'] pt-3 lg:pt-5">{price} $</p>
+                            {modifications.some(modification => modification.name && modification.price) && (
+                            <div>
+                                <p className="text-black text-opacity-50 text-base lg:text-xl font-medium font-['Poppins'] pt-3 lg:pt-5">Characteristic</p>
+                                <div className="flex flex-row gap-x-4 pt-3 lg:pt-4">
+                                    {modifications.map((modification) => (
+                                        <button
+                                            className={`px-1.5 py-1 sm:px-3 sm:py-1 lg:px-4 lg:py-2 ${modification.name === selectedModification?.name ? 'bg-slate-400 text-black' : 'border-black border'} rounded-xl sm:rounded-2xl`}
+                                            onClick={() => onModificationClick(modification)}
+                                        >
+                                            {modification.name}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <p className="text-black text-opacity-50 text-base lg:text-xl font-medium font-['Poppins'] pt-5 lg:pt-8">Color</p>
-                            <div className="flex flex-row gap-x-1 xs2:gap-x-5 sm:gap-x-10 md:gap-x-10 md2:gap-x-0 md2:justify-around pt-3 lg:pt-4">
-                                <button className=" px-1.5 py-1.5 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 bg-slate-400 text-xs md:text-base rounded-xl sm:rounded-2xl">Midnight</button>
-                                <button className="px-1.5 py-1.5 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 border-black text-xs md:text-base rounded-xl sm:rounded-2xl border">Starlight</button>
-                                <button className="px-1.5 py-1.5 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 border-black text-xs md:text-base rounded-xl sm:rounded-2xl border">Red</button>
-                                <button className=" px-1.5 py-1.5 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 border-black text-xs md:text-base rounded-xl sm:rounded-2xl border">Graphite</button>
-                                <button className=" px-1.5 py-1.5 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 border-black text-xs md:text-base rounded-xl sm:rounded-2xl border">Silver</button>
+                            )}
+                            {colors.length > 0 && (
+                                <p className="text-black text-opacity-50 text-base lg:text-xl font-medium font-['Poppins'] pt-5 lg:pt-8">Color</p>
+                            )}
+                            <div className="flex flex-row gap-x-5 xs2:gap-x-8 sm:gap-x-10 md:gap-x-10 md2:gap-x-10 justi-start pt-3 lg:pt-4">
+                                {colors.map((color) => (
+                                    <button
+                                        className={`px-2 py-1.5 xs2:px-3 sm:px-4 sm:py-1.5 md2:px-2 md2:py-1 lg:px-4 lg:py-2 2xl:px-6 2xl:py-2 ${color === pickedColor ? 'bg-slate-400 text-black' : 'border-black border text-xs md:text-base'
+                                            } rounded-xl sm:rounded-2xl`}
+                                        onClick={() => сolorButtonClick(color)}
+                                    >
+                                        {color}
+                                    </button>
+                                ))}
                             </div>
                             <div className="flex items-center justify-center pt-8 text-xl">
-                                <button className="bg-black items-center px-2 py-1.5 md:px-5 md:py-2 lg:px-10 lg:py-3 rounded-2xl text-text font-medium whitespace-nowrap flex flex-row gap-x-2">
+                                <button className="bg-black items-end px-2 py-1.5 md:px-5 md:py-2 lg:px-10 lg:py-3 rounded-2xl text-text font-medium whitespace-nowrap flex flex-row gap-x-2"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        toast.success('Added to Cart');
+                                    }} >
                                     <img src="/images/bag.svg"
                                         className="cursor-pointer items-center lg:w-6 lg:h-6 lg:px-0.5" />
                                     Add to bag</button>
@@ -116,12 +258,50 @@ export default function Product() {
                     </div>
                     <div className=" pt-8 mt-8 col-span-10 border-t-2 border-black border-opacity-50 order-3">
                         <p className="text-black text-2xl lg:text-4xl font-bold font-['Poppins']">Description</p>
-                        <p className="text-zinc-600 text-lg lg:text-2xl font-medium font-['Poppins'] pt-8">Apple's recent presentation is certainly an interesting event. It can be perceived as a kind of answer to critics and the beginning of the fight against stagnation, which captured not only Cupertino, but also most of the technological giants.
-
-                            The announcement of the new AirPods, Watch Ultra and the rejection of the usual classification of new iPhone generations (saying goodbye to the Mini and the return of the Plus) fills the souls of fans of the Californian brand with hope for exciting future presentations and, as a result, more interesting gadgets.
-
-                            Today we will take a closer look at the brand's new smartwatch — the Watch Ultra. A premium gadget that probably few people expected to see, but which will definitely be the new achievement of the apple franchise called Watch.
+                        <p className="text-zinc-600 text-lg lg:text-2xl font-medium font-['Poppins'] pt-8">
+                            {item?.description}
                         </p>
+                    </div>
+                </div>
+                <div className="pt-10 w-full pr-2 sm:pr-4 lg:pr-14 px-2 sm:px-4 lg:px-14">
+                    <p className="text-black text-2xl lg:text-4xl font-bold font-['Poppins']">Specificity</p>
+                    <div className="grid grid-cols-6">
+                        <div className="flex flex-col col-span-6 md2:col-span-3">
+                            <div className="flex flex-col">
+                                {firstUniqueTypes.map((uniqueType) => (
+                                    <><p className="text-zinc-600 text-lg font-medium pt-6">{uniqueType.type}</p>
+                                        <div className="flex flex-col gap-y-1 pt-3">
+                                            {characteristics
+                                                .filter((char) => char.type === uniqueType.type)
+                                                .map((char) => (
+                                                    <div>
+                                                        <span className="text-zinc-600 text-base font-normal">{char.name}: </span>
+                                                        <span className="text-black text-base font-normal">{char.value}</span>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="hidden md2:flex flex-col col-span-3">
+                            <div className="flex flex-col pl-4">
+                                {remainingUniqueTypes.map((uniqueType) => (
+                                    <><p className="text-zinc-600 md2:text-lg font-medium pt-6">{uniqueType.type}</p>
+                                        <div className="flex flex-col gap-y-1 pt-3">
+                                            {characteristics
+                                                .filter((chars) => chars.type === uniqueType.type)
+                                                .map((chars) => (
+                                                    <div>
+                                                        <span className="text-zinc-600 text-base font-normal">{chars.name}: </span>
+                                                        <span className="text-black text-base font-normal">{chars.value}</span>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
