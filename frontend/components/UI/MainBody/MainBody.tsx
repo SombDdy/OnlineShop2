@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import classnames from 'classnames';
 import Image from 'next/image';
 
 

@@ -8,10 +8,7 @@ import Link from "next/link";
 export default function Footer() {
   const router = useRouter()
   const path = router.asPath
-  const isCategory = router.asPath.split('/')[2];
   const categoryNameInPath = path.split('/')[2];
-  const { links } = data;
-
   const icons = [
     {
       icon: "mi:computer",

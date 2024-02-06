@@ -9,7 +9,6 @@ export default function MainSidebar() {
     const router = useRouter();
     const path = router.asPath;
     const categoryNameInPath = path.split('/')[2];
-    const isCategory: boolean = path.split('/')[1] === 'categories' || path.split('/')[1] === 'basket';
 
     const icons = [
         {

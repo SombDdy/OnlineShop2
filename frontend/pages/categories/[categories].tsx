@@ -8,7 +8,6 @@ import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 export default function ProductCategory() {
 
     const router = useRouter()
-    const path = router.asPath
     const isCategory = router.asPath.split('/')[2];
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);

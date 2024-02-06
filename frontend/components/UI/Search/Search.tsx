@@ -57,8 +57,8 @@ export default function Search({ handleSearch, filterProccessors, setFilterProcc
     const categoryNameInPath = router.query.categories;
 
     useEffect(() => {
-        setMenuMoreHeight(isMoreButtonMenuVisible ? '17vh' : '0');
-        setMenuFilterHeight(isFilterMenuVisible ? '587px' : '0');
+        setMenuMoreHeight(isMoreButtonMenuVisible ? 'fit-content' : '0');
+        setMenuFilterHeight(isFilterMenuVisible ? 'fit-content' : '0');
     }, [isMoreButtonMenuVisible, isFilterMenuVisible]);
 
     const filterButton = () => {
@@ -247,10 +247,10 @@ export default function Search({ handleSearch, filterProccessors, setFilterProcc
                                 <div
                                     className={`${categoryNameInPath === "AirPods" || categoryNameInPath === "Dyson" || categoryNameInPath === "All" ? 'hidden' : 'flex'} flex-col md2:px-3 lg:px-4 xl:px-6 py-8 gap-y-6 rounded-b-3xl bg-white border border-b border-t border-transparent h-fit -mx-1 items-center`}
                                 >
-                                    <p className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-8 py-2 rounded-3xl w-32">Proccessor</p>
+                                    <p className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-6 py-2 rounded-3xl w-32">Proccessor</p>
                                     <div className="flex flex-col gap-y-1 px-8 pb-4">
                                         {allProcessors.map((proccesor, index) => (
-                                            <label key={index} className=" flex items-center gap-x-2 ">
+                                            <label key={index} className=" flex items-center gap-x-2 text-zinc-500">
                                                 <input type="checkbox" className="text-zinc-500 bg-white" onChange={() => addOrRemoveProccessor(proccesor)} />
                                                 <p onClick={() => addOrRemoveProccessor(proccesor)}>{proccesor}</p>
                                             </label>
