@@ -8,14 +8,16 @@ export default function Bag() {
     const [isFormVisible, setIsFormVisible] = useState(true);
     const router = useRouter()
     const path = router.asPath
-    const isCategory = router.asPath.split('/')[2];
+    const isCategory = router.asPath.split('/')[1];
     const isBasket: boolean = path.split('/')[1] === 'basket';
+    const isMain: boolean = path.split('/')[1].slice(1).trim() === '';
     const handleButtonClick = () => {
         setIsFormVisible(!isFormVisible);
     };
+
     const { colors } = data;
     return (
-        <div className={`${isBasket ? 'flex justify-center w-full md2:w-3/12' : 'w-full md2:w-2/12'} ${!!isCategory || isBasket ? 'md2:fixed' : 'md2:hidden'} md2:top-32 md2:right-4 mb-6 mx-2 md2:mx-0 md2:mb-0 pt-4 md2:0 border-t-2 md2:border-t-0 border-black border-opacity-50`}>
+        <div className={`${(!isCategory || !!isBasket)  ? 'flex justify-center w-full md2:w-3/12' : 'w-full md2:w-2/12'} ${(isCategory || !!isBasket) ? 'flex md2:fixed' : ''} ${isMain ?  'hidden' : ''} md2:top-32 md2:right-4 mb-6  md2:mx-0 md2:mb-0 pt-4 md2:0 border-t-2 md2:border-t-0 border-black border-opacity-50`}>
             {isBasket ? (
                 <><div className={`bg-text rounded-3xl w-full xs2:w-4/5 sm:w-3/5 md2:w-full h-fit p-10 ${isFormVisible ? 'block' : 'hidden'}`}>
                     <p className="text-black text-3xl font-medium">Contact information</p>
@@ -73,7 +75,7 @@ export default function Bag() {
                     </div></>
             ) : (
                 <><div className="flex flex-col text-start md2:text-center items-start md2:items-center w-full">
-                    <p className="text-black text-2xl md2:text-4xl lg:text-5xl font-medium w-full">Bag</p>
+                    <p className="text-black text-2xl md2:text-4xl lg:text-5xl font-medium w-full pl-4 md2:pl-0">Bag</p>
                     <div className="flex md2:grid grid-cols-3 gap-2 lg:gap-5 mt-10 mx-1 md2:mx-0">
                         {colors.map((k) => <div className="bg-text w-full md2:w-5/6 h-auto py-3 lg:py-3 flex items-center justify-center rounded-2xl">
                             <img src={k.img} className="w-1/2" />
@@ -85,7 +87,6 @@ export default function Bag() {
                             View Bag
                         </button>
                     </Link>
-                </div>
                     <div className="flex md2:hidden justify-center w-full">
                         <Link href={'/basket'} className="">
                             <button className="flex md2:text-lg lg:text-xl font-medium whitespace-nowrap mt-10 px-3 md2:px-4 lg:px-6 xl:px-10 py-2 gap-x-2 lg:w-40 xl:w-48 bg-black text-text rounded-2xl items-center">
@@ -93,7 +94,9 @@ export default function Bag() {
                                 View Bag
                             </button>
                         </Link>
-                    </div></>
+                    </div>
+                </div>
+                    </>
             )}
         </div>
     )

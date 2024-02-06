@@ -32,13 +32,19 @@ interface ProductInfo {
 }
 
 interface Props {
-    handleSearch: (e: ChangeEvent<HTMLInputElement>) => void
+    handleSearch: (e: ChangeEvent<HTMLInputElement>) => void,
+    filterProccessors: { name: string, value: string }[],
+    setFilterProccessors: any,
+    filterMemory: { name?: string, price: string }[],
+    setFilterMemory: any,
+    filterColor: { name: string, color: string, main: boolean }[],
+    setFilterColor: any
+    setFilterPrice : (tx : string) => void
 }
 
-export default function Search({ handleSearch }: Props) {
+export default function Search({ handleSearch, filterProccessors, setFilterProccessors, filterMemory, setFilterMemory, filterColor, setFilterColor, setFilterPrice }: Props) {
     const router = useRouter();
     const path = router.asPath;
-    const categoryNameInPath = path.split('/')[2];
     const isHomePage: boolean = router.pathname === '/';
     const isCategory: boolean = path.split('/')[1] === 'categories';
     const [isFilterMenuVisible, setFilterMenuVisibility] = useState(false);
@@ -48,30 +54,7 @@ export default function Search({ handleSearch }: Props) {
     const [activeMoreButton, setActiveMoreButton] = useState('');
     const [activeFilterButton, setActiveFilterButton] = useState('');
 
-    const categoryType = router.query.categories;
-
-    const getAllUniqueCharacteristics = () => {
-        const uniqueTypes = new Set<string>();
-        const typeValueMap: { [key: string]: string[] } = {};
-
-        item?.characteristics.forEach((char) => {
-            uniqueTypes.add(char.type);
-
-            if (!typeValueMap[char.type]) {
-                typeValueMap[char.type] = [];
-            }
-
-            typeValueMap[char.type].push(char.value);
-        });
-
-        return { uniqueTypes: Array.from(uniqueTypes), typeValueMap };
-    };
-
-    const item: ProductInfo | undefined = data.find((category) => {
-        const categoryName = category.name.split(' ')[0];
-        return categoryName.replace(/\s/g, '') === categoryType;
-    });
-    const { uniqueTypes, typeValueMap } = getAllUniqueCharacteristics();
+    const categoryNameInPath = router.query.categories;
 
     useEffect(() => {
         setMenuMoreHeight(isMoreButtonMenuVisible ? '17vh' : '0');
@@ -81,42 +64,85 @@ export default function Search({ handleSearch }: Props) {
     const filterButton = () => {
         setFilterMenuVisibility(!isFilterMenuVisible);
         if (activeFilterButton === 'filter') {
-            setActiveFilterButton('')
+            setActiveFilterButton('');
         } else {
-            setActiveFilterButton('filter')
+            setActiveFilterButton('filter');
         }
-
     };
 
     const moreButton = () => {
         setMoreButtonMenuVisibility(!isMoreButtonMenuVisible);
         if (activeMoreButton === 'more') {
-            setActiveMoreButton('')
+            setActiveMoreButton('');
         } else {
-            setActiveMoreButton('more')
+            setActiveMoreButton('more');
         }
-
-    }
-
-    const getUniqueCharacteristicTypes = (characteristics: any[]) => {
-        const uniqueTypes = new Set();
-
-        const uniqueCharacteristics = characteristics.filter((characteristic) => {
-            const { type } = characteristic;
-
-            if (!uniqueTypes.has(type)) {
-                uniqueTypes.add(type);
-                return true;
-            }
-
-            return false;
-        });
-
-        return uniqueCharacteristics;
     };
 
-    const characteristics = item?.characteristics || [];
-    const uniqueCharacteristicTypes = getUniqueCharacteristicTypes(characteristics);
+    const allProcessors = Array.from(new Set(data
+        .filter(item => item.category === categoryNameInPath)
+        .flatMap(item =>
+            item.characteristics
+                .filter(char => char.name === 'Processor model')
+                .map(char => char.value)
+        )
+    ));
+
+    const allMemory = Array.from(new Set(data
+        .filter(item => item.category === categoryNameInPath)
+        .flatMap(item =>
+            item.modifications
+                .filter(mod => ('name' in mod) && mod.name !== undefined)
+                .map(mod => mod.name || '')
+        )
+    ));
+
+    const allColors = Array.from(new Set(data
+        .filter(item => item.category === categoryNameInPath)
+        .flatMap(item =>
+            item.images.map(image => {
+                const nameColorPart = image.name.split('/');
+                return nameColorPart.length >= 4 ? nameColorPart[3] : '';
+            })
+        )
+        .filter(value => value !== '')
+    ));
+
+    const addOrRemoveProccessor = (proccessorName: string) => {
+        setFilterProccessors((prevFilters: any[]) => {
+            const existingFilterIndex = prevFilters.findIndex((filter: { value: string; }) => filter.value === proccessorName);
+    
+            if (existingFilterIndex !== -1) {
+                return prevFilters.filter((_: any, index: any) => index !== existingFilterIndex);
+            } else {
+                return [...prevFilters, { name: 'Processor model', value: proccessorName, type: "Processor" }];
+            }
+        });
+    }
+
+    const addOrRemoveMemory = (memory: string) => {
+        setFilterMemory((prevFilters: any[]) => {
+            const existingFilterIndex = prevFilters.findIndex((filter: { name: string; }) => filter.name === memory);
+    
+            if (existingFilterIndex !== -1) {
+                return prevFilters.filter((_: any, index: any) => index !== existingFilterIndex);
+            } else {
+                return [...prevFilters, { name: memory, price: '' }];
+            }
+        });
+    }
+
+    const addOrRemoveColor = (colored: string) => {
+        setFilterColor((prevFilters: any[]) => {
+            const existingFilterIndex = prevFilters.findIndex((filter: { name: string; }) => filter.name === colored);
+    
+            if (existingFilterIndex !== -1) {
+                return prevFilters.filter((_: any, index: any) => index !== existingFilterIndex);
+            } else {
+                return [...prevFilters, { name: colored }];
+            }
+        });
+    }
 
     const categoryName = [
         {
@@ -145,21 +171,29 @@ export default function Search({ handleSearch }: Props) {
     return (
 
         <div className={`w-full text-black ${(isCategory || isHomePage) ? 'grid' : 'hidden'} grid-cols-11 items-center justify-between px-2 sm:px-4 lg:px-10`}>
-            <><div className="col-span-5 flex flex-col md2:hidden">
+            <><div className="col-span-11 flex flex-col md2:hidden">
                 <p className="mb-3 text-zinc-600 font-normal pl-4">Search items</p>
-                <input type="text" placeholder="Apple Watch, Samsung S21, Macbook Pro, ..." className="truncate bg-text pl-4 text-xs rounded-lg w-full py-2 placeholder-black text-opacity-50 font-medium" />
-            </div><div className="text-text-light relative hidden md2:flex col-span-1">
+                <div className = "flex flex-row items-center justify-between">
+                    <input type="text" placeholder="Apple Watch, Samsung S21, Macbook Pro, ..." className="truncate bg-text pl-4 text-xs rounded-lg w-full py-2 placeholder-black text-opacity-50 font-medium" onChange={handleSearch} />
+                    <button onClick={filterButton} className="relative border-l-2 border-text pl-4 ml-4">
+                        <Icon icon="bi:filter-left" className={` ${activeFilterButton === 'filter' ? 'bg-slate-400 text-text' : 'bg-text text-zinc-400'} rounded-xl ${!!isCategory ? 'text-3xl lg:text-4xl' : 'text-3xl lg:text-5xl'} px-1`} />
+                    </button>
+                </div>
+            </div>
+
+                <div className="text-text-light relative hidden md2:flex col-span-1">
                     <Link href='/'>
                         <img src="/images/logoV1.svg" />
                     </Link>
-                </div><div className={`hidden md2:flex ${!!isCategory ? 'gap-x-0 lg:gap-x-2 xl:gap-x-6 2xl:gap-x-6' : 'gap-x-5 md2:gap-x-2 lg:gap-x-5 xl:gap-x-12 2xl:gap-x-12'} items-center col-span-7`}>
+                </div>
+                <div className={`hidden md2:flex ${!!isCategory ? 'gap-x-0 lg:gap-x-2 xl:gap-x-6 2xl:gap-x-6' : 'gap-x-5 md2:gap-x-2 lg:gap-x-5 xl:gap-x-12 2xl:gap-x-12'} items-center col-span-7`}>
                     {categoryName.slice(0, 5).map((k) =>
                         <Link href={`/categories/${k.name.replace(/\s/g, '')}`}>
-                            <button className={`${categoryNameInPath === k.name.replace(/\s/g, '') ? 'text-text-lightblue bg-text rounded-3xl' : 'text-text'} ${!!isCategory ? 'md2:ml-2 xl:ml-0 md2:text-sm lg:text-medium xl:text-xl 2xl:text-2xl md2:px-1.5 lg:px-2 2xl:px-4' : 'md2:text-base md2:ml-2 xl:ml-0 lg:text-xl 2xl:text-3xl md2:px-2 lg:px-3 2xl:px-5'} whitespace-nowrap py-2`}>{k.name}</button>
+                            <button className={`${categoryNameInPath === k.name.replace(/\s/g, '') ? 'text-text-lightblue bg-text rounded-3xl' : 'text-text'} ${!!isCategory ? 'md2:ml-2 xl:ml-0 md2:text-sm lg:text-medium xl:text-xl 2xl:text-2xl md2:px-1 lg:1.5 2xl:px-4' : 'md2:text-base md2:ml-2 xl:ml-0 lg:text-xl 2xl:text-3xl md2:px-2 lg:px-3 2xl:px-5'} whitespace-nowrap py-2`}>{k.name}</button>
                         </Link>
                     )}
                     <div>
-                        <button onClick={moreButton} className={` ${activeMoreButton === 'more' ? 'text-text-lightblue bg-white rounded-3xl' : 'text-text '} ${!!isCategory ? 'md2:ml-2 xl:ml-0 md2:text-sm lg:text-medium xl:text-xl 2xl:text-2xl md2:px-1.5 lg:px-2 2xl:px-4' : 'md2:text-base md2:ml-2 xl:ml-0 lg:text-xl 2xl:text-3xl md2:px-2 lg:px-3 2xl:px-5'} py-2`}>More</button>
+                        <button onClick={moreButton} className={` ${activeMoreButton === 'more' ? 'text-text-lightblue bg-white rounded-3xl' : 'text-text '} ${!!isCategory ? 'md2:ml-2 xl:ml-0 md2:text-sm lg:text-medium xl:text-xl 2xl:text-2xl md2:px-1 lg:px-1.5 2xl:px-4' : 'md2:text-base md2:ml-2 xl:ml-0 lg:text-xl 2xl:text-3xl md2:px-2 lg:px-3 2xl:px-5'} py-2`}>More</button>
                     </div>
                     {isMoreButtonMenuVisible && (
                         <div className={`absolute flex top-28 left-[48vw]`} style={{ maxHeight: menuMoreHeight, overflow: 'hidden', transition: 'max-height 0.5s ease-in-out' }}>
@@ -177,7 +211,8 @@ export default function Search({ handleSearch }: Props) {
                     <Link href='/categories/All'>
                         <button className={`${categoryNameInPath === 'All' ? 'text-text-lightblue bg-text rounded-3xl' : 'text-text'} ${!!isCategory ? 'md2:text-base md2:ml-2 xl:ml-0 lg:text-medium xl:text-xl 2xl:text-2xl md2:px-2 lg:px-3 2xl:px-6' : 'md2:text-base md2:ml-2 xl:ml-0 lg:text-xl 2xl:text-3xl md2:px-2 lg:px-3 2xl:px-5 '} py-2  text-text`}>All</button>
                     </Link>
-                </div><div className="hidden md2:flex col-span-2 col-start-10 items-center justify-end flex-row ">
+                </div>
+                <div className="hidden md2:flex col-span-2 col-start-10 items-center justify-end flex-row ">
                     <div className="flex flex-row">
                         <div className={`text-text-light flex items-center justify-between rounded-3xl px-2 bg-text ${!!isCategory ? 'w-20 lg:w-28 2xl:w-32' : 'w-28 lg:w-28 2xl:w-52'}`}>
                             <Icon icon="iconamoon:search" className={`${!!isCategory ? 'text-medium 2xl:text-xl' : 'text-lg 2xl:text-3xl'} text-text-lightblue`} />
@@ -192,24 +227,62 @@ export default function Search({ handleSearch }: Props) {
 
                         {isFilterMenuVisible && (
                             <div className={`absolute flex flex-row top-28 right-1/4`} style={{ maxHeight: menuFilterHeight, overflow: 'hidden', transition: 'max-height 0.5s ease-in-out' }}>
-                                {uniqueCharacteristicTypes.slice(0, 4).map((uniqueType) => (
-                                    <div
-                                        key={uniqueType.type}
-                                        className="bg-white rounded-b-3xl rounded-l-3xl border border-gray-300 mb-4"
-                                    >
-                                        <p className="text-zinc-600 text-lg font-medium px-8 py-4">{uniqueType.type}</p>
-                                        <div className="flex flex-col gap-y-1 px-8 pb-4">
-                                            {characteristics
-                                                .filter((char) => char.type === uniqueType.type)
-                                                .map((char) => (
-                                                    <div key={char.name} className="flex justify-between">
-                                                        <span className="text-zinc-600 text-base font-normal">{char.name}:</span>
-                                                        <span className="text-black text-base font-normal">{char.value}</span>
-                                                    </div>
-                                                ))}
-                                        </div>
+                                <div className="flex flex-col md2:px-3 lg:px-4 xl:px-6 py-8 gap-y-6 rounded-b-3xl bg-white border border-b border-t border-transparent h-fit -mx-1 items-center">
+                                    <div className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-8 py-2 rounded-3xl w-32">
+                                        Price
                                     </div>
-                                ))}
+                                    <div className="flex flex-col gap-y-4 items-center">
+                                        <button 
+                                            className="border border-zinc-500 text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center xl:px-8 py-2 rounded-3xl w-32 xl:w-44" 
+                                            onClick={() => setFilterPrice('higher')}
+                                        >
+                                                Higher</button>
+                                        <Icon icon="icon-park-outline:change" className="text-zinc-500 text-2xl" />
+                                        <button className="border border-zinc-500 text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center xl:px-8 py-2 rounded-3xl w-32 xl:w-44"
+                                        onClick={() => setFilterPrice('lower')}
+                                        >Lower</button>
+                                    </div>
+                                </div>
+
+                                <div
+                                    className={`${categoryNameInPath === "AirPods" || categoryNameInPath === "Dyson" || categoryNameInPath === "All" ? 'hidden' : 'flex'} flex-col md2:px-3 lg:px-4 xl:px-6 py-8 gap-y-6 rounded-b-3xl bg-white border border-b border-t border-transparent h-fit -mx-1 items-center`}
+                                >
+                                    <p className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-8 py-2 rounded-3xl w-32">Proccessor</p>
+                                    <div className="flex flex-col gap-y-1 px-8 pb-4">
+                                        {allProcessors.map((proccesor, index) => (
+                                            <label key={index} className=" flex items-center gap-x-2 ">
+                                                <input type="checkbox" className="text-zinc-500 bg-white" onChange={() => addOrRemoveProccessor(proccesor)} />
+                                                <p onClick={() => addOrRemoveProccessor(proccesor)}>{proccesor}</p>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div
+                                    className={`${categoryNameInPath === "AirPods" || categoryNameInPath === "Dyson" || categoryNameInPath === "All" ? 'hidden' : 'flex'} flex-col md2:px-3 lg:px-4 xl:px-6 py-8 gap-y-6 rounded-b-3xl bg-white border border-b border-t border-transparent h-fit -mx-1 items-center`}
+                                >
+                                    <p className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-8 py-2 rounded-3xl w-32">Memory</p>
+                                    <div className="flex flex-col gap-y-1 px-8 pb-4">
+                                        {allMemory.map((memory, index) => (
+                                            <label key={index} className="flex items-center gap-x-2">
+                                                <input type="checkbox" onChange={() => addOrRemoveMemory(memory)} />
+                                                <p onClick={() => addOrRemoveMemory(memory)}>{memory}</p>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div
+                                    className={`${categoryNameInPath === "AirPods" || categoryNameInPath === "All" ? 'hidden' : 'flex'} flex-col md2:px-3 lg:px-4 xl:px-6 py-8 gap-y-6 rounded-b-3xl bg-white border border-b border-t border-transparent h-fit -mx-1 items-center`}
+                                >
+                                    <p className="bg-text-lightblue text-zinc-500 xl:text-lg font-medium font-['Poppins'] text-center px-8 py-2 rounded-3xl w-32">Colors</p>
+                                    <div className="flex flex-col gap-y-1 px-8 pb-4">
+                                        {allColors.map((color, index) => (
+                                            <label key={index} className="flex items-center gap-x-2">
+                                                <input type="checkbox" onChange={() => addOrRemoveColor(color)} />
+                                                <p onClick={() => addOrRemoveColor(color)}>{color}</p>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
 
 
                             </div>

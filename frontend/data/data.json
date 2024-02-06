@@ -66,7 +66,7 @@
       {
         "name": "Processor model",
         "value": "Apple A17 Pro Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -331,7 +331,7 @@
       {
         "name": "Processor model",
         "value": "Apple A17 Pro Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -587,7 +587,7 @@
       {
         "name": "Processor model",
         "value": "Apple A16 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -864,7 +864,7 @@
       {
         "name": "Processor model",
         "value": "Apple A16 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -1140,7 +1140,7 @@
       {
         "name": "Processor model",
         "value": "Apple A16 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -1412,7 +1412,7 @@
       {
         "name": "Processor model",
         "value": "Apple A15 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -1730,7 +1730,7 @@
       {
         "name": "Processor model",
         "value": "Apple A15 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -1976,7 +1976,7 @@
       {
         "name": "Processor model",
         "value": "Apple A15 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -2260,7 +2260,7 @@
       {
         "name": "Processor model",
         "value": "Apple A14 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -2544,7 +2544,7 @@
       {
         "name": "Processor model",
         "value": "Apple A14 Bionic",
-        "type": "CPU/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Nuber of cores",
@@ -3158,9 +3158,9 @@
         "type": "OS"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "A14 Bionic",
-        "type": "Processor/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Number of cores",
@@ -3349,9 +3349,9 @@
         "type": "OS"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "A13 Bionic",
-        "type": "Processor/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Number of cores",
@@ -3497,9 +3497,9 @@
         "type": "OS"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple M2",
-        "type": "Processor/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Number of cores",
@@ -3641,9 +3641,9 @@
         "type": "OS"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple M1",
-        "type": "Processor/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Number of cores",
@@ -3815,9 +3815,9 @@
         "type": "OS"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple M2",
-        "type": "Processor/Video Accelerator"
+        "type": "Processor"
       },
       {
         "name": "Number of cores",
@@ -3980,7 +3980,7 @@
         "type": "Strap"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple S9 SiP",
         "type": "Processor"
       },
@@ -4165,7 +4165,7 @@
         "type": "Strap"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple S8",
         "type": "Processor"
       },
@@ -4252,7 +4252,7 @@
         "color": "#F2586F"
       },
       {
-        "name": "AppleWatch/AppleWatch8/red/fourredwatch8.png ",
+        "name": "/AppleWatch/AppleWatch8/red/fourredwatch8.png ",
         "color": "#F2586F"
       },
       {
@@ -4372,7 +4372,7 @@
         "type": "Strap"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple S8 SiP",
         "type": "Processor"
       },
@@ -4535,7 +4535,7 @@
         "type": "Strap"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple S8 SiP",
         "type": "Processor"
       },
@@ -4703,7 +4703,7 @@
         "type": "Strap"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "Apple S8 SiP",
         "type": "Processor"
       },
@@ -6953,7 +6953,7 @@
         "type": "Processor"
       },
       {
-        "name": "CPU Modele",
+        "name": "Processor model",
         "value": "M3 Pro",
         "type": "Processor"
       },
@@ -7156,7 +7156,7 @@
         "type": "Processor"
       },
       {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "M3 Pro",
         "type": "Processor"
       },
@@ -7359,12 +7359,7 @@
         "type": "Processor"
       },
       {
-        "name": "Processor",
-        "value": "M3 Max",
-        "type": "Processor"
-      },
-      {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "M3 Max",
         "type": "Processor"
       },
@@ -7567,12 +7562,7 @@
         "type": "Processor"
       },
       {
-        "name": "Processor",
-        "value": "M3 Max",
-        "type": "Processor"
-      },
-      {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "M3 Max",
         "type": "Processor"
       },
@@ -7775,12 +7765,7 @@
         "type": "Processor"
       },
       {
-        "name": "Processor",
-        "value": "M3 Max",
-        "type": "Processor"
-      },
-      {
-        "name": "Processor",
+        "name": "Processor model",
         "value": "M3 Max",
         "type": "Processor"
       },
@@ -8812,7 +8797,7 @@
         "type": "Processor"
       },
       {
-        "name": "Name",
+        "name": "Processor model",
         "value": "M1",
         "type": "Processor"
       },
@@ -9053,8 +9038,8 @@
         "type": "Processor"
       },
       {
-        "name": "Name",
-        "value": "Core M3",
+        "name": "Processor model",
+        "value": "M3",
         "type": "Processor"
       },
       {

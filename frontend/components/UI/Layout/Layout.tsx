@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
-import Search from "../Search/Search";
 import Bag from "../Bag/Bag";
 import { useRouter } from "next/router";
 interface LayoutProps {

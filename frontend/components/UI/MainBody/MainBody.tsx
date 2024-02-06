@@ -75,9 +75,9 @@ export default function MainBody() {
                 </div>
                 <div className="w-full pt-10 lg:pr-1 xl:pr-12 col-span-6 row-start-3 row-end-4 grid grid-cols-10 ">
                     <div className=" text-stone-50 lg:text-2xl xl:text-3xl font-medium lg:pt-16 xl:pt-16 mb-16 opacity-80 hidden lg:flex flex-row">
-                        <Icon icon="cil:arrow-top" className="inline-flex rotate-90" />
-                        <div className="inline-flex px-4">1</div>
                         <Icon icon="cil:arrow-top" className="inline-flex -rotate-90" />
+                        <div className="inline-flex px-4">1</div>
+                        <Icon icon="cil:arrow-top" className="inline-flex rotate-90" />
                     </div>
                     <div className="flex flex-row justify-between col-span-10 lg:col-span-5 xl:col-span-4 col-start-1 lg:col-start-6 xl:col-start-7 lg:pt-6 xl:pt-6">
                         {colors.map((e) => (

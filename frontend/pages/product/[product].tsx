@@ -52,8 +52,6 @@ interface ProductInfo {
 
 export default function Product() {
     const router = useRouter()
-    const path = router.asPath
-    const isCategory = router.asPath.split('/')[2];
 
     const [pickedColor, setPickedColor] = useState<string | null>(null);
     const [uniqueColors, setUniqueColors] = useState<Set<string>>(new Set());
